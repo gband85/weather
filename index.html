@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+  <style>
+  #unit-buttons {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  h1 {
+    /*margin: 0;*/
+  }
+  body {
+background: #000000; /* fallback for old browsers */
+background: -webkit-linear-gradient(to left, #000000 , #434343); /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to left, #000000 , #434343); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.top-buffer {
+  margin-top:200px;
+  padding:0;
+  clear: both;
+}
+.bottom-buffer {
+  margin-bottom:50px;
+}
+
+#location, #temp, #description, #title {
+	color: white;
+}
+
+</style>
+  </head>
+<body>
+  <div class="container">
+    <div class="row">
+
+
+          <div id="title" class="col-md-6">
+            <h1>FreeCodeCamp Weather Machine</h1>
+          </div>
+            <div class="col-md-2 col-md-offset-4">
+              <div class="btn-group" id="unit-buttons">
+              <button id="fahrenheit" class="btn btn-primary">F</button>
+              <button id="celsius" class="btn btn-primary active">C</button>
+            </div>
+            </div>
+
+      <!-- <h1 class="" id="title"></h1> -->
+      <!-- <div class="btn-group">
+        <button id="locatio" type="button" class="btn btn-link" aria-haspopup="true" aria-expanded="false">Your local weather</button>
+
+      </div> -->
+      <!-- <div class="btn-group pull-right">
+      <button id="fahrenheit" class="btn btn-primary">F</button>
+      <button id="celsius" class="btn btn-primary active">C</button>
+    </div> -->
+
+    </div>
+    <div class="row">
+      <div id="weather_div" class="col-md-4 col-md-offset-4">
+<h1 id="location" class="text-center"></h1>
+<h1 id="icon" class="text-center"></h1>
+<h1 id="temp" class="text-center"></h1>
+<h2 id="description" class="text-center"></h2>
+</div>
+        </div>
+      </div>
+    </div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+    <script>
+    // $(document).ready(function() {
+// var crd;
+    function locate_success(pos) {
+      var crd = pos.coords;
+
+      getWeather(crd.latitude, crd.longitude);
+    };
+    navigator.geolocation.getCurrentPosition(locate_success);
+    // console.log(crd);
+
+// getWeather();
+    function getWeather(lat, long) {
+var weatherAPI = "http://api.openweathermap.org/data/2.5/weather?";
+      $.getJSON(weatherAPI, {
+        lat: lat,
+        lon: long,
+        appid: "6e9d30aa04efb35a98660cb48055e099"
+      })
+
+      .done(function(data) {
+
+        console.log(data);
+
+        var tempf_current=Math.floor(9/5*(data.main.temp - 273.15)+32);
+
+        var tempc_current=Math.floor(data.main.temp - 273.15);
+// })
+// }
+// console.log(weather);
+$("#location").html(data["name"]);
+        $("#temp").html(tempc_current + "&#x2103");
+
+        $("#description").html(data["weather"][0]["description"]);
+        $("#icon").html("<img src='" + "http://openweathermap.org/img/w/" + data["weather"][0]["icon"] + ".png'" + "class='center-block'>");
+
+        $("#celsius").on("click", function() {
+          $("#celsius").addClass("active");
+          $("#fahrenheit").removeClass("active");
+          // $("#temp").html("");
+          $("#temp").html(tempc_current + "&#x2103");
+          // $("#temp-units-fahrenheit").html("<a href='#' class='btn btn-default' id='temp-units-celsius'>F</a>");
+
+        });
+        $("#fahrenheit").on("click", function() {
+          $("#celsius").removeClass("active");
+          $("#fahrenheit").addClass("active");
+          // $("#temp").html("");
+          $("#temp").html(tempf_current + "&#x2109");
+          // $("#temp-units-celsius").html("<a href='#' class='h1' id='temp-units-fahrenheit'>C</a>");
+});
+
+
+})
+    }
+
+
+
+    // });
+
+    </script>
+  </body>
+  </html>
