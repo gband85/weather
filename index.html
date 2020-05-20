@@ -75,7 +75,7 @@ html,body {
 function getWeather(pos) {
 
 $.ajax({
-   url: "./getweatherdata.php",
+   url: "/getweatherdata.php",
    method: "POST",
    dataType: "json",
    data: {lat: pos.coords.latitude,lon:pos.coords.longitude},
