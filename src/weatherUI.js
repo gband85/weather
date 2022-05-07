@@ -2,8 +2,8 @@ const weatherUI = () => {
     const container = document.createElement("div");
    container.className="container";
    container.innerHTML=`
-   <div class="row">
-         <div class="col-md-6 offset-md-3 top-buffer">
+   
+         
            
         
          <div class="card text-center">
@@ -23,9 +23,9 @@ const weatherUI = () => {
                
            </div>
          </div>
-         </div>
+         
         
-    </div>
+    
    `
    return container;
    }
