@@ -12,8 +12,8 @@ var weatherAPI = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon
  const request = await fetch(weatherAPI)
 const response = await request.json()
 console.log(response)
-let weather = response;
 
+printWeather(response)
 }
 const printWeather=(weather)=>{
 
