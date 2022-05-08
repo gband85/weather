@@ -1,12 +1,10 @@
 
 
-const getWeather = async function(pos) {
+const getWeather = async function(lat,lon) {
 
 
  //$appid='49a090f8fd32a555bd97635debc34855';
 // $url ='https://api.openweathermap.org/data/2.5/weather?';
-var lat = pos.coords.latitude;
-var lon = pos.coords.longitude
 var weatherAPI = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=49a090f8fd32a555bd97635debc34855`
 
  const request = await fetch(weatherAPI)
