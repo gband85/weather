@@ -15,9 +15,16 @@ console.log(response)
 
 printWeather(response)
 }
+const getWeatherPlace=async function(place){
+  let weatherAPI=`http://api.openweathermap.org/geo/1.0/direct?q=${place}&limit=5&appid=49a090f8fd32a555bd97635debc34855`
+  const request=await fetch(weatherAPI);
+  const response=await request.json();
+
+  printWeather(response)
+}
 const printWeather=(weather)=>{
 
-  
+   
 let location_ = document.getElementById("location");
 var temp = document.getElementById("temp");
 var description = document.getElementById("description");
@@ -97,4 +104,4 @@ var tempf=Math.floor(9/5*(weather.main.temp - 273.15)+32);
 
 }
 
-export { getWeather,printWeather }
+export { getWeather,getWeatherPlace, printWeather }
