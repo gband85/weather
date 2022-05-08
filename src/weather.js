@@ -1,10 +1,7 @@
+
+
 const getWeather = async function(pos) {
-  let location_ = document.getElementById("location");
-  var temp = document.getElementById("temp");
-  var description = document.getElementById("description");
-  var weatherIcon = document.getElementById("weather-icon");
-  var celsius = document.getElementById("celsius");
-  var fahrenheit = document.getElementById("fahrenheit");
+
 
  //$appid='49a090f8fd32a555bd97635debc34855';
 // $url ='https://api.openweathermap.org/data/2.5/weather?';
@@ -17,6 +14,16 @@ const response = await request.json()
 console.log(response)
 let weather = response;
 
+}
+const printWeather=(weather)=>{
+
+  
+let location_ = document.getElementById("location");
+var temp = document.getElementById("temp");
+var description = document.getElementById("description");
+var weatherIcon = document.getElementById("weather-icon");
+var celsius = document.getElementById("celsius");
+var fahrenheit = document.getElementById("fahrenheit");
 
 var tempf=Math.floor(9/5*(weather.main.temp - 273.15)+32);
        var tempc=Math.floor(weather.main.temp - 273.15);
@@ -30,23 +37,23 @@ var tempf=Math.floor(9/5*(weather.main.temp - 273.15)+32);
        celsius.addEventListener("click", function() {
          temp.innerHTML = tempc + '<sup>&#x2103</sup>';
          
-         celsius.classList.remove("btn-light");
-         celsius.classList.add("btn-dark")
+         celsius.classList.add("btn-light");
+         celsius.classList.remove("btn-dark")
          
-         fahrenheit.classList.remove("btn-dark");
-         fahrenheit.classList.add("btn-light")
+         fahrenheit.classList.add("btn-dark");
+         fahrenheit.classList.remove("btn-light")
          
        });
 
        fahrenheit.addEventListener("click", function() {
         temp.innerHTML = tempf + '<sup>&#x2109</sup>';
          
-         celsius.classList.remove("btn-dark");
-         celsius.classList.add("btn-light")
+         celsius.classList.add("btn-dark");
+         celsius.classList.remove("btn-light")
 
          
-         fahrenheit.classList.remove("btn-light");
-         fahrenheit.classList.add("btn-dark")
+         fahrenheit.classList.add("btn-light");
+         fahrenheit.classList.remove("btn-dark")
          
                    
        });
@@ -90,4 +97,4 @@ var tempf=Math.floor(9/5*(weather.main.temp - 273.15)+32);
 
 }
 
-export { getWeather }
+export { getWeather,printWeather }
