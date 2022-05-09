@@ -14,20 +14,22 @@ printWeather(response)
 }
 const getWeatherPlace=async function(place){
   document.querySelector("#test").innerHTML=""
-  let weatherAPI=`http://api.openweathermap.org/geo/1.0/direct?q=${place}&limit=5&appid=49a090f8fd32a555bd97635debc34855`
+  //let weatherAPI=`http://api.openweathermap.org/geo/1.0/direct?q=${place}&limit=5&appid=49a090f8fd32a555bd97635debc34855`
+  let weatherAPI=`https://api.geocod.io/v1.7/geocode?q=${place}&api_key=76666ae5216511198a22598e21a61877d2fe2e9`
   const request=await fetch(weatherAPI);
   const response=await request.json();
-let list=document.createElement("ul")
+let list=document.querySelector("#test")
 list.className="places-list"
-response.forEach(function(el){
+console.log(response)
+response["results"].forEach(function(el){
 let listItem =  document.createElement("li");
 listItem.className="place"
 let listItemLink=document.createElement("a")
 listItemLink.className="place-link"
-listItemLink.setAttribute("data-lat",el["lat"])
-listItemLink.setAttribute("data-lon", el["lon"])
+listItemLink.setAttribute("data-lat","1")
+listItemLink.setAttribute("data-lon", "2")
 listItemLink.href="#"
-listItemLink.textContent=`${el["name"]}, ${el["country"]}`
+listItemLink.textContent=`${el["address_components"]["city"]}, ${el["address_components"]["country"]}`
 listItemLink.addEventListener("click",function(e) {
   document.querySelector("#temp").textContent=""
     getWeather(parseFloat(e.target.attributes["data-lat"].nodeValue),parseFloat(e.target.attributes["data-lon"].nodeValue))
@@ -36,9 +38,9 @@ listItemLink.addEventListener("click",function(e) {
 
 listItem.appendChild(listItemLink)
 list.appendChild(listItem)
- 
+
 })
-document.querySelector("#test").appendChild(list)
+// document.querySelector("#test").appendChild(list)
 }
 const printWeather=(weather)=>{
 
