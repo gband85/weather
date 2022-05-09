@@ -9,20 +9,39 @@ var weatherAPI = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon
 
  const request = await fetch(weatherAPI)
 const response = await request.json()
-console.log(response)
 
 printWeather(response)
 }
 const getWeatherPlace=async function(place){
+  document.querySelector("#test").innerHTML=""
   let weatherAPI=`http://api.openweathermap.org/geo/1.0/direct?q=${place}&limit=5&appid=49a090f8fd32a555bd97635debc34855`
   const request=await fetch(weatherAPI);
   const response=await request.json();
+let list=document.createElement("ul")
+list.className="places-list"
+response.forEach(function(el){
+let listItem =  document.createElement("li");
+listItem.className="place"
+let listItemLink=document.createElement("a")
+listItemLink.className="place-link"
+listItemLink.setAttribute("data-lat",el["lat"])
+listItemLink.setAttribute("data-lon", el["lon"])
+listItemLink.href="#"
+listItemLink.textContent=`${el["name"]}, ${el["country"]}`
+listItemLink.addEventListener("click",function(e) {
+  document.querySelector("#temp").textContent=""
+    getWeather(parseFloat(e.target.attributes["data-lat"].nodeValue),parseFloat(e.target.attributes["data-lon"].nodeValue))
+   document.querySelector("#test").innerHTML=""
+ })
 
-  printWeather(response)
+listItem.appendChild(listItemLink)
+list.appendChild(listItem)
+ 
+})
+document.querySelector("#test").appendChild(list)
 }
 const printWeather=(weather)=>{
 
-   
 let location_ = document.getElementById("location");
 var temp = document.getElementById("temp");
 var description = document.getElementById("description");
@@ -33,7 +52,7 @@ var fahrenheit = document.getElementById("fahrenheit");
 var tempf=Math.floor(9/5*(weather.main.temp - 273.15)+32);
        var tempc=Math.floor(weather.main.temp - 273.15);
        
-       location_.innerHTML = weather["name"]
+       location_.innerHTML = `${weather["name"]}, ${weather["sys"]["country"]}`
        
        temp.prepend(tempf)
        description.innerHTML = weather["weather"][0]["description"]
