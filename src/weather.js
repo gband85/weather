@@ -13,12 +13,24 @@ const response = await request.json()
 console.log(response)
 printWeather(response)
 }
+const getPlace=async function(lat,lon) {
+let geocodeAPI=  `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&apiKey=699b052181a84305b5f22c2aaaa29cc2`
+const request=await fetch(geocodeAPI);
+const response=await request.json();
+
+  if (response["features"][0]["properties"]["state"]) {
+    printLocation(`${response["features"][0]["properties"]["city"]}, ${response["features"][0]["properties"]["state"]}, ${response["features"][0]["properties"]["country"]}`)
+}
+else {
+printLocation(`${response["features"][0]["properties"]["city"]}, ${response["features"][0]["properties"]["county"]}, ${response["features"][0]["properties"]["country"]}`)
+}
+}
 const getCoords=async function(place){
   document.querySelector("#test").innerHTML=""
   //let weatherAPI=`http://api.openweathermap.org/geo/1.0/direct?q=${place}&limit=5&appid=49a090f8fd32a555bd97635debc34855`
   //let weatherAPI=`https://api.geocod.io/v1.7/geocode?q=${place}&api_key=76666ae5216511198a22598e21a61877d2fe2e9`
-  let weatherAPI=`https://api.geoapify.com/v1/geocode/search?text=${place}&apiKey=699b052181a84305b5f22c2aaaa29cc2`
-  const request=await fetch(weatherAPI);
+  let geocodeAPI=`https://api.geoapify.com/v1/geocode/search?text=${place}&apiKey=699b052181a84305b5f22c2aaaa29cc2`
+  const request=await fetch(geocodeAPI);
   const response=await request.json();
 let list=document.querySelector("#test")
 list.className="places-list"
