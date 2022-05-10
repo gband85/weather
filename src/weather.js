@@ -24,6 +24,7 @@ const response=await request.json();
 else {
 printLocation(`${response["features"][0]["properties"]["city"]}, ${response["features"][0]["properties"]["county"]}, ${response["features"][0]["properties"]["country"]}`)
 }
+getWeather(lat,lon)
 }
 const getCoords=async function(place){
   document.querySelector("#test").innerHTML=""
@@ -32,6 +33,7 @@ const getCoords=async function(place){
   let geocodeAPI=`https://api.geoapify.com/v1/geocode/search?text=${place}&apiKey=699b052181a84305b5f22c2aaaa29cc2`
   const request=await fetch(geocodeAPI);
   const response=await request.json();
+
 let list=document.querySelector("#test")
 list.className="places-list"
 console.log(response)
@@ -43,15 +45,27 @@ listItemLink.className="place-link"
 listItemLink.setAttribute("data-lat",el["properties"]["lat"])
 listItemLink.setAttribute("data-lon", el["properties"]["lon"])
 listItemLink.href="#"
-listItemLink.textContent=el["properties"]["formatted"]
+let location;
+if (el["properties"]["city"]) {
+  if (el["properties"]["state"]) {
+  location=`${el["properties"]["city"]}, ${el["properties"]["state"]}, ${el["properties"]["country"]}`
+}
+else {
+  location=`${el["properties"]["city"]}, ${el["properties"]["county"]}, ${el["properties"]["country"]}`
+}
+}
+else {
+  if (el["properties"]["state"]) {
+    location=`${el["properties"]["state"]}, ${el["properties"]["country"]}`
+  }
+  else {
+location=`${el["properties"]["county"]}, ${el["properties"]["country"]}`
+}
+}
+listItemLink.textContent=location
 listItemLink.addEventListener("click",function(e) {
   document.querySelector("#temp").textContent=""
-  if (el["properties"]["state"]) {
-      printLocation(`${el["properties"]["city"]}, ${el["properties"]["state"]}, ${el["properties"]["country"]}`)
-  }
-else {
-  printLocation(`${el["properties"]["city"]}, ${el["properties"]["county"]}, ${el["properties"]["country"]}`)
-}
+printLocation(location)
     getWeather(parseFloat(e.target.attributes["data-lat"].nodeValue),parseFloat(e.target.attributes["data-lon"].nodeValue))
    document.querySelector("#test").innerHTML=""
  })
@@ -147,4 +161,4 @@ var tempf=Math.floor(9/5*(weather.main.temp - 273.15)+32);
 
 }
 
-export { getWeather,getCoords,printWeather }
+export { getWeather,getCoords,printWeather,printLocation,getPlace }
