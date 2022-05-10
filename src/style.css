@@ -63,7 +63,7 @@ justify-content: space-between;
       top: 120px;
   }
   .location-input input {
-      
+      width: 500px;
   }
   .card {
       background-color: #fff;
@@ -168,6 +168,7 @@ position: relative;
     position: relative;
     top: 2px;
     background-color: #fff;
+    width: 500px;
 }
 a:visited {
     color: black;
