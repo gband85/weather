@@ -34,6 +34,12 @@ listItemLink.href="#"
 listItemLink.textContent=el["properties"]["formatted"]
 listItemLink.addEventListener("click",function(e) {
   document.querySelector("#temp").textContent=""
+  if (el["properties"]["state"]) {
+      printLocation(`${el["properties"]["city"]}, ${el["properties"]["state"]}, ${el["properties"]["country"]}`)
+  }
+else {
+  printLocation(`${el["properties"]["city"]}, ${el["properties"]["county"]}, ${el["properties"]["country"]}`)
+}
     getWeather(parseFloat(e.target.attributes["data-lat"].nodeValue),parseFloat(e.target.attributes["data-lon"].nodeValue))
    document.querySelector("#test").innerHTML=""
  })
@@ -42,12 +48,14 @@ listItem.appendChild(listItemLink)
 list.appendChild(listItem)
 
 })
-
+const printLocation=(location) =>{
+let location_ = document.getElementById("location");
+location_.innerHTML = location
+}
 // document.querySelector("#test").appendChild(list)
 }
 const printWeather=(weather)=>{
 
-let location_ = document.getElementById("location");
 var temp = document.getElementById("temp");
 var description = document.getElementById("description");
 var weatherIcon = document.getElementById("weather-icon");
@@ -58,7 +66,6 @@ var tempf=Math.floor(9/5*(weather.main.temp - 273.15)+32);
 //var tempf=weather["properties"]["periods"][0]["temperature"]
        var tempc=Math.floor(weather.main.temp - 273.15);
        
-       location_.innerHTML = `${weather["name"]}, ${weather["sys"]["country"]}`
        
        temp.prepend(tempf)
        description.innerHTML = weather["weather"][0]["description"]
