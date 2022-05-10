@@ -5,11 +5,15 @@ const getWeather = async function(lat,lon) {
 
  //$appid='49a090f8fd32a555bd97635debc34855';
 // $url ='https://api.openweathermap.org/data/2.5/weather?';
-var weatherAPI = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=49a090f8fd32a555bd97635debc34855`
-
+//var weatherAPI = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=49a090f8fd32a555bd97635debc34855`
+let weatherAPI=`https://api.weather.gov/points/${lat},${lon}`
  const request = await fetch(weatherAPI)
 const response = await request.json()
-
+console.log(response)
+let weatherAPI2=`https://api.weather.gov/gridpoints/${response["properties"]["gridId"]}/${response["properties"]["gridX"]},${response["properties"]["gridY"]}/forecast`
+const request2=await fetch(weatherAPI2)
+const response2=await request2.json()
+console.log(response2)
 printWeather(response)
 }
 const getWeatherPlace=async function(place){
@@ -26,8 +30,8 @@ let listItem =  document.createElement("li");
 listItem.className="place"
 let listItemLink=document.createElement("a")
 listItemLink.className="place-link"
-listItemLink.setAttribute("data-lat","1")
-listItemLink.setAttribute("data-lon", "2")
+listItemLink.setAttribute("data-lat",el["location"]["lat"])
+listItemLink.setAttribute("data-lon", el["location"]["lng"])
 listItemLink.href="#"
 listItemLink.textContent=`${el["address_components"]["city"]}, ${el["address_components"]["country"]}`
 listItemLink.addEventListener("click",function(e) {
