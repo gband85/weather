@@ -60,12 +60,13 @@ listItem.appendChild(listItemLink)
 list.appendChild(listItem)
 
 })
+}
 const printLocation=(location) =>{
 let location_ = document.getElementById("location");
 location_.innerHTML = location
 }
 // document.querySelector("#test").appendChild(list)
-}
+
 const printWeather=(weather)=>{
 
 var temp = document.getElementById("temp");
