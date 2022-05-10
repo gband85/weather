@@ -5,35 +5,33 @@ const getWeather = async function(lat,lon) {
 
  //$appid='49a090f8fd32a555bd97635debc34855';
 // $url ='https://api.openweathermap.org/data/2.5/weather?';
-//var weatherAPI = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=49a090f8fd32a555bd97635debc34855`
-let weatherAPI=`https://api.weather.gov/points/${lat},${lon}`
+var weatherAPI = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=49a090f8fd32a555bd97635debc34855`
+//use weather API to translate coordinates to grid location
+//let weatherGridAPI=`https://api.weather.gov/points/${lat},${lon}`
  const request = await fetch(weatherAPI)
 const response = await request.json()
 console.log(response)
-let weatherAPI2=`https://api.weather.gov/gridpoints/${response["properties"]["gridId"]}/${response["properties"]["gridX"]},${response["properties"]["gridY"]}/forecast`
-const request2=await fetch(weatherAPI2)
-const response2=await request2.json()
-console.log(response2)
 printWeather(response)
 }
-const getWeatherPlace=async function(place){
+const getCoords=async function(place){
   document.querySelector("#test").innerHTML=""
   //let weatherAPI=`http://api.openweathermap.org/geo/1.0/direct?q=${place}&limit=5&appid=49a090f8fd32a555bd97635debc34855`
-  let weatherAPI=`https://api.geocod.io/v1.7/geocode?q=${place}&api_key=76666ae5216511198a22598e21a61877d2fe2e9`
+  //let weatherAPI=`https://api.geocod.io/v1.7/geocode?q=${place}&api_key=76666ae5216511198a22598e21a61877d2fe2e9`
+  let weatherAPI=`https://api.geoapify.com/v1/geocode/search?text=${place}&apiKey=699b052181a84305b5f22c2aaaa29cc2`
   const request=await fetch(weatherAPI);
   const response=await request.json();
 let list=document.querySelector("#test")
 list.className="places-list"
 console.log(response)
-response["results"].forEach(function(el){
+response["features"].forEach(function(el){
 let listItem =  document.createElement("li");
 listItem.className="place"
 let listItemLink=document.createElement("a")
 listItemLink.className="place-link"
-listItemLink.setAttribute("data-lat",el["location"]["lat"])
-listItemLink.setAttribute("data-lon", el["location"]["lng"])
+listItemLink.setAttribute("data-lat",el["properties"]["lat"])
+listItemLink.setAttribute("data-lon", el["properties"]["lon"])
 listItemLink.href="#"
-listItemLink.textContent=`${el["address_components"]["city"]}, ${el["address_components"]["country"]}`
+listItemLink.textContent=el["properties"]["formatted"]
 listItemLink.addEventListener("click",function(e) {
   document.querySelector("#temp").textContent=""
     getWeather(parseFloat(e.target.attributes["data-lat"].nodeValue),parseFloat(e.target.attributes["data-lon"].nodeValue))
@@ -44,6 +42,7 @@ listItem.appendChild(listItemLink)
 list.appendChild(listItem)
 
 })
+
 // document.querySelector("#test").appendChild(list)
 }
 const printWeather=(weather)=>{
@@ -56,6 +55,7 @@ var celsius = document.getElementById("celsius");
 var fahrenheit = document.getElementById("fahrenheit");
 
 var tempf=Math.floor(9/5*(weather.main.temp - 273.15)+32);
+//var tempf=weather["properties"]["periods"][0]["temperature"]
        var tempc=Math.floor(weather.main.temp - 273.15);
        
        location_.innerHTML = `${weather["name"]}, ${weather["sys"]["country"]}`
@@ -127,4 +127,4 @@ var tempf=Math.floor(9/5*(weather.main.temp - 273.15)+32);
 
 }
 
-export { getWeather,getWeatherPlace, printWeather }
+export { getWeather,getCoords,printWeather }
