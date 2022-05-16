@@ -10,6 +10,7 @@ var weatherAPI = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon
 //let weatherGridAPI=`https://api.weather.gov/points/${lat},${lon}`
  const request = await fetch(weatherAPI)
 const response = await request.json()
+
 console.log(response)
 printWeather(response)
 }
@@ -30,50 +31,38 @@ const getCoords=async function(place){
   document.querySelector("#test").innerHTML=""
   //let weatherAPI=`http://api.openweathermap.org/geo/1.0/direct?q=${place}&limit=5&appid=49a090f8fd32a555bd97635debc34855`
   //let weatherAPI=`https://api.geocod.io/v1.7/geocode?q=${place}&api_key=76666ae5216511198a22598e21a61877d2fe2e9`
-  let geocodeAPI=`https://api.geoapify.com/v1/geocode/search?text=${place}&apiKey=699b052181a84305b5f22c2aaaa29cc2`
-  const request=await fetch(geocodeAPI);
-  const response=await request.json();
+  let geocodeAPI=`https://api.geoapify.com/v1/geocode/autocomplete?text=${place}&type=city&format=json&apiKey=699b052181a84305b5f22c2aaaa29cc2`
+  const request=new Request(geocodeAPI)
+  const response=await fetch(request);
+  const locationData= await response.json();
+  console.log(locationData)
+ printList(locationData);
+}
+const printList=(obj)=>{
 
-let list=document.querySelector("#test")
+const locations=obj["results"]
+const list=document.querySelector("#test")
 list.className="places-list"
-console.log(response)
-response["features"].forEach(function(el){
-let listItem =  document.createElement("li");
+for (const location of locations){//response["features"].forEach(function(el){
+const listItem =  document.createElement("li");
 listItem.className="place"
-let listItemLink=document.createElement("a")
+const listItemLink=document.createElement("a")
 listItemLink.className="place-link"
-listItemLink.setAttribute("data-lat",el["properties"]["lat"])
-listItemLink.setAttribute("data-lon", el["properties"]["lon"])
+listItemLink.setAttribute("data-lat",location["lat"])
+listItemLink.setAttribute("data-lon", location["lon"])
 listItemLink.href="#"
-let location;
-if (el["properties"]["city"]) {
-  if (el["properties"]["state"]) {
-  location=`${el["properties"]["city"]}, ${el["properties"]["state"]}, ${el["properties"]["country"]}`
-}
-else {
-  location=`${el["properties"]["city"]}, ${el["properties"]["county"]}, ${el["properties"]["country"]}`
-}
-}
-else {
-  if (el["properties"]["state"]) {
-    location=`${el["properties"]["state"]}, ${el["properties"]["country"]}`
-  }
-  else {
-location=`${el["properties"]["county"]}, ${el["properties"]["country"]}`
-}
-}
-listItemLink.textContent=location
+listItemLink.textContent=location["formatted"]
 listItemLink.addEventListener("click",function(e) {
   document.querySelector("#temp").textContent=""
-printLocation(location)
+ printLocation(location["formatted"])
     getWeather(parseFloat(e.target.attributes["data-lat"].nodeValue),parseFloat(e.target.attributes["data-lon"].nodeValue))
-   document.querySelector("#test").innerHTML=""
+   list.innerHTML=""
  })
 
 listItem.appendChild(listItemLink)
 list.appendChild(listItem)
 
-})
+}
 }
 const printLocation=(location) =>{
 let location_ = document.getElementById("location");
@@ -90,11 +79,11 @@ var celsius = document.getElementById("celsius");
 var fahrenheit = document.getElementById("fahrenheit");
 
 var tempf=Math.floor(9/5*(weather.main.temp - 273.15)+32);
-//var tempf=weather["properties"]["periods"][0]["temperature"]
+//var tempf=weather["periods"][0]["temperature"]
        var tempc=Math.floor(weather.main.temp - 273.15);
        
        
-       temp.prepend(tempf)
+       temp.innerHTML=`${tempf}<sup>&#x2109</sup>`
        description.innerHTML = weather["weather"][0]["description"]
        weatherIcon.innerHTML = weather["weather"][0]["description"];
 
